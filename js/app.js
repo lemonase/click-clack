@@ -1,7 +1,5 @@
 'use strict'
 
-// let rainbowColors = ["orange", "yellow", "green", "blue", "indigo", "violet"];
-
 window.onload = function () {
     // dom elements
     let headingEl = document.getElementById('heading');
@@ -9,22 +7,22 @@ window.onload = function () {
     let typingBoxEl = document.getElementById('typing-box');
     let timerBoxEl = document.getElementById('timer-box');
     let wpmBoxEl = document.getElementById('wpm-box');
+    let letterElements = spanifyPrompt(promptEl, typingPrompt);
 
+    // prompt variables
     let typedIndex = 0;
     let timeStarted = 0;
     let typingStarted = false;
     let timeInterval;
-
     let outputString = '';
-    let title = titleRandomizer();
     let typingPrompt = promptRandomizer();
-    let letterElements = spanifyPrompt(promptEl, typingPrompt);
     let numWords = getNumWords(typingPrompt);
 
-
+    // set initial style for prompt
     updatePrompt(promptEl, typedIndex, letterElements, 'yellow');
-    headingEl.textContent = title;
 
+    // set a random title
+    headingEl.textContent = titleRandomizer();
 
     // keydown event includes all keys
     document.addEventListener('keydown', event => {
@@ -56,8 +54,6 @@ window.onload = function () {
         } else if (keyID == 39) {
             event.preventDefault(); // prevent single quote action
         }
-
-        // console.log(keyID + "  " + keyChar);
 
         if (!typingStarted) { // started typing a character
             typingStarted = true;
@@ -115,8 +111,6 @@ function updatePrompt(promptEl, index, letterElements, correctChar) {
     let prevCursorEl = letterElements[index - 1];
 
     let goodColor = "cyan";
-    // let goodColor = rainbowColors[Math.floor((Math.random() * 100) % rainbowColors.length)];
-    console.log(goodColor);
     let badColor = "#f93636";
     let currentColor = "yellow";
     let defaultColor = "white";
@@ -170,7 +164,7 @@ function spanifyPrompt(promptEl, promptString) {
 
 // returns a random prompt
 function promptRandomizer() {
-    
+
     // these are just test prompts for now
     // in the future, we can get quotes from and api
     // or another source
@@ -188,7 +182,7 @@ function promptRandomizer() {
 
 // returns a random title
 function titleRandomizer() {
-    
+
     // stupid titles
     const titles = [
         "TYPE IT UP",
