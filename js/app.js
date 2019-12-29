@@ -13,7 +13,6 @@ window.onload = async function() {
   // dom elements
   const headingEl = document.getElementById("heading");
   const promptEl = document.getElementById("prompt-display");
-  const typingBoxEl = document.getElementById("typing-box");
   const timerBoxEl = document.getElementById("timer-box");
   const wpmBoxEl = document.getElementById("wpm-box");
   const letterElements = spanifyPrompt(promptEl, typingPrompt);
@@ -39,9 +38,6 @@ window.onload = async function() {
       // update prompt with new index
       updatePrompt(promptEl, typedIndex, letterElements, true);
     }
-
-    // update the typing box after every key
-    // updateTypingBox(typingBoxEl, outputString);
   });
 
   // keypress event omits modifier keys
@@ -94,9 +90,6 @@ window.onload = async function() {
       wpmBoxEl.style.color = "yellow";
       timerBoxEl.style.color = "yellow";
     }
-
-    // update the typing box
-    // updateTypingBox(typingBoxEl, outputString);
   });
 };
 
