@@ -215,7 +215,12 @@ async function promptRandomizer() {
   const randomQuote = json[Math.floor(Math.random() * json.length)];
   const fullText = randomQuote.quoteText + " - " + randomQuote.quoteAuthor;
 
-  return fullText;
+  // not all quotes have authors
+  if (randomQuote.quoteAuthor) {
+    return fullText;
+  } else {
+    return randomQuote.quoteText;
+  }
 }
 
 /*
