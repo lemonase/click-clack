@@ -146,14 +146,14 @@ function updatePrompt(promptEl, index, letterElements, correctChar) {
   const cursorEl = letterElements[index];
   const prevCursorEl = letterElements[index - 1];
 
-  const goodColor = "cyan";
+  const goodColor = "#26ff00";
   const badColor = "#f93636";
   const currentColor = "yellow";
   const defaultColor = "white";
 
   if (prevCursorEl) {
     if (prevCursorEl.innerText == " ") {
-      prevCursorEl.style.border = "1px ridge" + goodColor;
+      prevCursorEl.style.borderBottom = "5px dotted" + defaultColor;
     }
     prevCursorEl.style.color = goodColor;
     prevCursorEl.classList.remove("cursor");
@@ -163,7 +163,7 @@ function updatePrompt(promptEl, index, letterElements, correctChar) {
     if (cursorEl && correctChar) {
       cursorEl.style.color = currentColor;
       if (cursorEl.innerText == " ") {
-        cursorEl.style.border = "1px ridge" + currentColor;
+        cursorEl.style.borderBottom = "5px dotted" + currentColor;
       }
       cursorEl.classList.add("cursor");
     } else if (cursorEl) {
