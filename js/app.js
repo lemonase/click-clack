@@ -1,6 +1,15 @@
 'use strict'
 
-window.onload = function () {
+window.onload = async function () {
+    // prompt variables
+    let typedIndex = 0;
+    let timeStarted = 0;
+    let typingStarted = false;
+    let timeInterval;
+    let outputString = '';
+    let typingPrompt = await promptRandomizer();
+    let numWords = getNumWords(typingPrompt);
+
     // dom elements
     let headingEl = document.getElementById('heading');
     let promptEl = document.getElementById('prompt-display');
@@ -8,15 +17,6 @@ window.onload = function () {
     let timerBoxEl = document.getElementById('timer-box');
     let wpmBoxEl = document.getElementById('wpm-box');
     let letterElements = spanifyPrompt(promptEl, typingPrompt);
-
-    // prompt variables
-    let typedIndex = 0;
-    let timeStarted = 0;
-    let typingStarted = false;
-    let timeInterval;
-    let outputString = '';
-    let typingPrompt = promptRandomizer();
-    let numWords = getNumWords(typingPrompt);
 
     // set initial style for prompt
     updatePrompt(promptEl, typedIndex, letterElements, 'yellow');
@@ -163,21 +163,16 @@ function spanifyPrompt(promptEl, promptString) {
 }
 
 // returns a random prompt
-function promptRandomizer() {
+async function promptRandomizer() {
 
-    // these are just test prompts for now
-    // in the future, we can get quotes from and api
-    // or another source
-    const prompts = [
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-        "Sphinx of black quartz, judge my vow.",
-        "The true test of intelligence is not how much you know how to do, it's how you behave when you don't know what to do. - John Holt",
-        "If you want to know what a man's like, take a good look at how he treats his inferiors, not his equals. - Sirius Black",
-        "Every man desires to live long, but no man wishes to be old. - Jonathan Swift",
-        "Every saint has a past, and every sinner has a future. - Oscar Wilde"
-    ];
+  // fetch quotes file
+  let response = await fetch('/data/quotes.json');
+  let json = await response.json()
 
-    return prompts[Math.floor((Math.random() * prompts.length))];
+  let randomQuote = json[Math.floor(Math.random() * json.length)];
+  let fullText = randomQuote.quoteText + ' - ' + randomQuote.quoteAuthor
+
+  return fullText
 }
 
 // returns a random title
