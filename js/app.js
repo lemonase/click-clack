@@ -1,198 +1,252 @@
-'use strict'
+"use strict";
 
-window.onload = async function () {
-    // prompt variables
-    let typedIndex = 0;
-    let timeStarted = 0;
-    let typingStarted = false;
-    let timeInterval;
-    let outputString = '';
-    let typingPrompt = await promptRandomizer();
-    let numWords = getNumWords(typingPrompt);
+window.onload = async function() {
+  // prompt variables
+  let typedIndex = 0;
+  let timeStarted = 0;
+  let typingStarted = false;
+  let timeInterval;
+  let outputString = "";
+  const typingPrompt = await promptRandomizer();
+  const numWords = getNumWords(typingPrompt);
 
-    // dom elements
-    let headingEl = document.getElementById('heading');
-    let promptEl = document.getElementById('prompt-display');
-    let typingBoxEl = document.getElementById('typing-box');
-    let timerBoxEl = document.getElementById('timer-box');
-    let wpmBoxEl = document.getElementById('wpm-box');
-    let letterElements = spanifyPrompt(promptEl, typingPrompt);
+  // dom elements
+  const headingEl = document.getElementById("heading");
+  const promptEl = document.getElementById("prompt-display");
+  const typingBoxEl = document.getElementById("typing-box");
+  const timerBoxEl = document.getElementById("timer-box");
+  const wpmBoxEl = document.getElementById("wpm-box");
+  const letterElements = spanifyPrompt(promptEl, typingPrompt);
 
-    // set initial style for prompt
-    updatePrompt(promptEl, typedIndex, letterElements, 'yellow');
+  // set initial style for prompt
+  updatePrompt(promptEl, typedIndex, letterElements, true);
 
-    // set a random title
-    headingEl.textContent = titleRandomizer();
+  // set a random title
+  headingEl.textContent = titleRandomizer();
 
-    // keydown event includes all keys
-    document.addEventListener('keydown', event => {
-        if (event.keyCode == 8) { // backspace key
-            event.preventDefault();
+  // keydown event includes all keys
+  document.addEventListener("keydown", event => {
+    if (event.keyCode == 8) {
+      // backspace key
+      event.preventDefault();
 
-            // remove last character from string
-            outputString = outputString.slice(0, -1);
+      // remove last character from string
+      outputString = outputString.slice(0, -1);
 
-            // make sure the index is not negative
-            (typedIndex > 0 ? typedIndex -= 1 : typedIndex = 0);
+      // make sure the index is not negative
+      typedIndex > 0 ? (typedIndex -= 1) : (typedIndex = 0);
 
-            // update prompt with new index
-            updatePrompt(promptEl, typedIndex, letterElements, true);
-        }
+      // update prompt with new index
+      updatePrompt(promptEl, typedIndex, letterElements, true);
+    }
 
-        // update the typing box after every key
-        // updateTypingBox(typingBoxEl, outputString);
-    });
+    // update the typing box after every key
+    // updateTypingBox(typingBoxEl, outputString);
+  });
 
-    // keypress event omits modifier keys
-    document.addEventListener('keypress', event => {
-        let keyChar = event.key;
-        let keyID = event.keyCode;
-        let promptChar = typingPrompt[typedIndex];
+  // keypress event omits modifier keys
+  document.addEventListener("keypress", event => {
+    const keyChar = event.key;
+    const keyID = event.keyCode;
+    const promptChar = typingPrompt[typedIndex];
 
-        if (keyID == 32) { // spacebar
-            event.preventDefault(); // prevent default spacebar scrolldown
-        } else if (keyID == 39) {
-            event.preventDefault(); // prevent single quote action
-        }
+    if (keyID == 32) {
+      // spacebar
+      event.preventDefault(); // prevent default spacebar scrolldown
+    } else if (keyID == 39) {
+      event.preventDefault(); // prevent single quote action
+    }
 
-        if (!typingStarted) { // started typing a character
-            typingStarted = true;
-            timeStarted = new Date();
-            timeInterval = setInterval(updateTime, 100, timerBoxEl, wpmBoxEl, timeStarted, numWords);
-        }
+    if (!typingStarted) {
+      // started typing a character
+      typingStarted = true;
 
-        if (keyChar == promptChar) { // correct character typed
-            // increment index
-            typedIndex++;
+      // store time started and update timer every 100ms
+      timeStarted = new Date();
+      timeInterval = setInterval(
+        updateTime,
+        100,
+        timerBoxEl,
+        wpmBoxEl,
+        timeStarted,
+        numWords
+      );
+    }
 
-            // add to output for the typing box
-            outputString += keyChar;
+    if (keyChar == promptChar) {
+      // correct character typed
+      // increment index
+      typedIndex++;
 
-            // update cursor position
-            updatePrompt(promptEl, typedIndex, letterElements, true);
-        }
-        else { // wrong character typed
-            updatePrompt(promptEl, typedIndex, letterElements, false);
-        }
+      // add to output for the typing box
+      outputString += keyChar;
 
-        // check if we are finished typing
-        if (outputString.length == typingPrompt.length) {
-            clearInterval(timeInterval);
-            wpmBoxEl.style.color = "yellow";
-            timerBoxEl.style.color = "yellow";
-        }
+      // update cursor position
+      updatePrompt(promptEl, typedIndex, letterElements, true);
+    } else {
+      // wrong character typed
+      updatePrompt(promptEl, typedIndex, letterElements, false);
+    }
 
-        // update the typing box
-        // updateTypingBox(typingBoxEl, outputString);
-    });
+    // check if we are finished typing
+    if (outputString.length == typingPrompt.length) {
+      clearInterval(timeInterval);
+      wpmBoxEl.style.color = "yellow";
+      timerBoxEl.style.color = "yellow";
+    }
 
+    // update the typing box
+    // updateTypingBox(typingBoxEl, outputString);
+  });
 };
 
+/*
+ * Returns the length of an input string
+ *
+ * @param {string} inputString - string to get num of words from
+ * @return {int} number of words (separated by space)
+ */
 function getNumWords(inputString) {
-    return inputString.split(" ").length;
+  return inputString.split(" ").length;
 }
 
+/*
+ * This function "updates" the time dom element
+ * on an interval and calls updateWPM
+ *
+ * @param {DOMElement} timeEl - dom element for time
+ * @param {DOMElement} wpmEl - dom element for wpm
+ * @param {Date} startTime - time user started typing
+ * @param {int} numWords - number of words in the prompt
+ *
+ */
 function updateTime(timeEl, wpmEl, startTime, numWords) {
-    let timePassed = (new Date() - startTime) / 1000;
+  const timePassed = (new Date() - startTime) / 1000;
 
-    updateWPM(timePassed, wpmEl, numWords);
-    timeEl.innerText = "TIME: " + timePassed + " sec";
+  updateWPM(timePassed, wpmEl, numWords);
+  timeEl.innerText = "TIME: " + timePassed + " sec";
 }
 
+/*
+ * This function "updates" the wpm dom element
+ *
+ * @param {int} timeElapsed - the amount of time elapsed
+ * @param {DOMElement) wpmEl - element that shows wpm
+ * @param {int} numWords - number of words in the prompt
+ */
 function updateWPM(timeElapsed, wpmEl, numWords) {
-    let minElapsed = timeElapsed / 60;
+  const minElapsed = timeElapsed / 60;
 
-    wpmEl.innerText = "WPM: " + Math.floor(numWords / minElapsed);
+  wpmEl.innerText = "WPM: " + Math.floor(numWords / minElapsed);
 }
 
+/*
+ * This function "updates" the prompt by changing styles, etc.
+ *
+ * @param {DOMElement} promptEl - element that gets updated
+ * @param {int} index - the position of the char being typed
+ * @param {DOMElement[]} letterElements - the array of span elements
+ * @param {bool} correctChar - whether the correct character was typed
+ */
 function updatePrompt(promptEl, index, letterElements, correctChar) {
-    let nextCursorEl = letterElements[index + 1];
-    let cursorEl = letterElements[index];
-    let prevCursorEl = letterElements[index - 1];
+  const nextCursorEl = letterElements[index + 1];
+  const cursorEl = letterElements[index];
+  const prevCursorEl = letterElements[index - 1];
 
-    let goodColor = "cyan";
-    let badColor = "#f93636";
-    let currentColor = "yellow";
-    let defaultColor = "white";
+  const goodColor = "cyan";
+  const badColor = "#f93636";
+  const currentColor = "yellow";
+  const defaultColor = "white";
 
-    if (prevCursorEl) {
-        if (prevCursorEl.innerText == " ") {
-            prevCursorEl.style.border = "1px ridge" + goodColor;
-        }
-        prevCursorEl.style.color = goodColor;
-        prevCursorEl.classList.remove('cursor');
+  if (prevCursorEl) {
+    if (prevCursorEl.innerText == " ") {
+      prevCursorEl.style.border = "1px ridge" + goodColor;
     }
+    prevCursorEl.style.color = goodColor;
+    prevCursorEl.classList.remove("cursor");
+  }
 
-    if (cursorEl !== 'undefined') {
-        if (cursorEl && correctChar) {
-            cursorEl.style.color = currentColor;
-            if (cursorEl.innerText == " ") {
-                cursorEl.style.border = "1px ridge" + currentColor;
-            }
-            cursorEl.classList.add('cursor');
-        } else if (cursorEl) {
-            cursorEl.style.color = badColor;
-        }
+  if (cursorEl !== "undefined") {
+    if (cursorEl && correctChar) {
+      cursorEl.style.color = currentColor;
+      if (cursorEl.innerText == " ") {
+        cursorEl.style.border = "1px ridge" + currentColor;
+      }
+      cursorEl.classList.add("cursor");
+    } else if (cursorEl) {
+      cursorEl.style.color = badColor;
     }
+  }
 
-    if (nextCursorEl) {
-        nextCursorEl.style.color = defaultColor;
-    }
+  if (nextCursorEl) {
+    nextCursorEl.style.color = defaultColor;
+  }
 }
 
-// updates the value of the text box
-function updateTypingBox(boxEl, outputString) {
-    boxEl.textContent = outputString;
-}
-
-// takes an input string and appends a span for each character
+/*
+ * Takes an input string and appends a span for each character
+ * to the promptEl
+ *
+ * @param {DOMElement} promptEl - the dom element to be populated
+ * @param {string} promptString - the string to be splint into spans
+ *
+ * @returns {Array} an array of span elements for each letter in promptString
+ */
 function spanifyPrompt(promptEl, promptString) {
-    let charEls = [];
+  const charEls = [];
 
-    for (let i = 0; i < promptString.length; i++) {
-        let charEl = document.createElement("span");
-        charEl.innerText = promptString[i];
-        if (promptString[i] == " ")
-            charEl.classList.add("space");
-        charEls.push(charEl);
-
-        promptEl.appendChild(charEl);
+  for (let i = 0; i < promptString.length; i++) {
+    const charEl = document.createElement("span");
+    charEl.innerText = promptString[i];
+    if (promptString[i] == " ") {
+      charEl.classList.add("space");
     }
+    charEls.push(charEl);
 
-    return charEls;
+    promptEl.appendChild(charEl);
+  }
+
+  return charEls;
 }
 
-// returns a random prompt
+/*
+ * Return a random prompt string
+ *
+ * @returns {string} a random prompt
+ */
 async function promptRandomizer() {
-
   // fetch quotes file
-  let response = await fetch('/data/quotes.json');
-  let json = await response.json()
+  const response = await fetch("/data/quotes.json");
+  const json = await response.json();
 
-  let randomQuote = json[Math.floor(Math.random() * json.length)];
-  let fullText = randomQuote.quoteText + ' - ' + randomQuote.quoteAuthor
+  const randomQuote = json[Math.floor(Math.random() * json.length)];
+  const fullText = randomQuote.quoteText + " - " + randomQuote.quoteAuthor;
 
-  return fullText
+  return fullText;
 }
 
-// returns a random title
+/*
+ * Returns a random title string
+ *
+ * @returns {string} a random title
+ */
 function titleRandomizer() {
+  // stupid titles
+  const titles = [
+    "TYPE IT UP",
+    "I AIN'T GOT NO TYPE",
+    "DON'T FORGET YOUR FINGER(LESS) GLOVES",
+    "GOTTA GO FAST",
+    "I CAN'T FEEL ME FINGERS",
+    "SLIGHT OF HAND",
+    "1000 WPMs",
+    "MY HANDS ARE BLEEDING!!!",
+    "SMASH THOSE KEYS!",
+    "DON'T GIVE UP",
+    "KEYBOARD WARRIORS COME OUT TO PLAY",
+    "CLICK CLACK CLICK CLACK",
+    "CLICK CLICK BOOM"
+  ];
 
-    // stupid titles
-    const titles = [
-        "TYPE IT UP",
-        "I AIN'T GOT NO TYPE",
-        "DON'T FORGET YOUR FINGER(LESS) GLOVES",
-        "GOTTA GO FAST",
-        "I CAN'T FEEL ME FINGERS",
-        "SLIGHT OF HAND",
-        "1000 WPMs",
-        "MY HANDS ARE BLEEDING!!!",
-        "SMASH THOSE KEYS!",
-        "DON'T GIVE UP",
-        "KEYBOARD WARRIORS COME OUT TO PLAY",
-        "CLICK CLACK CLICK CLACK"
-    ];
-
-    return titles[Math.floor((Math.random() * titles.length))];
+  return titles[Math.floor(Math.random() * titles.length)];
 }
