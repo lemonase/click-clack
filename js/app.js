@@ -5,17 +5,45 @@ window.onload = async function() {
   let typedIndex = 0;
   let timeStarted = 0;
   let typingStarted = false;
+  let typingDone = false;
   let timeInterval;
   let outputString = "";
-  const typingPrompt = await promptRandomizer();
-  const numWords = getNumWords(typingPrompt);
+  let typingPrompt = await promptRandomizer();
+  let promptChar;
+  let numWords = getNumWords(typingPrompt);
 
   // dom elements
   const headingEl = document.getElementById("heading");
   const promptEl = document.getElementById("prompt-display");
   const timerBoxEl = document.getElementById("timer-box");
   const wpmBoxEl = document.getElementById("wpm-box");
-  const letterElements = spanifyPrompt(promptEl, typingPrompt);
+  const bottomTextEl = document.getElementById("bottom-text");
+  let letterElements = spanifyPrompt(promptEl, typingPrompt);
+  // TODO organize variables into objects
+
+  /*
+   * Function to reset prompt values
+   */
+  async function resetPrompt() {
+    typedIndex = 0;
+    timeStarted = 0;
+    typingStarted = false;
+    typingDone = false;
+    timeInterval;
+    outputString = "";
+
+    promptEl.innerText = "";
+    typingPrompt = await promptRandomizer();
+    numWords = getNumWords(typingPrompt);
+    letterElements = spanifyPrompt(promptEl, typingPrompt);
+
+    bottomTextEl.hidden = true;
+
+    updatePrompt(promptEl, typedIndex, letterElements, true);
+  }
+
+  // hide bottom text
+  bottomTextEl.hidden = true;
 
   // set initial style for prompt
   updatePrompt(promptEl, typedIndex, letterElements, true);
@@ -38,7 +66,15 @@ window.onload = async function() {
       // update prompt with new index
       updatePrompt(promptEl, typedIndex, letterElements, true);
     }
-  });
+
+    // enter key
+    // if we are done typing, reset
+    if (event.keyCode == 13 && typingDone) {
+      resetTimer(timerBoxEl, wpmBoxEl);
+      resetPrompt();
+      typingStarted = false;
+    }
+  }); // end keydown event listener
 
   // keypress event omits modifier keys
   document.addEventListener("keypress", event => {
@@ -46,31 +82,27 @@ window.onload = async function() {
     const keyID = event.keyCode;
     const promptChar = typingPrompt[typedIndex];
 
-    if (keyID == 32) {
-      // spacebar
-      event.preventDefault(); // prevent default spacebar scrolldown
-    } else if (keyID == 39) {
-      event.preventDefault(); // prevent single quote action
+    if (keyID == 32 || keyID == 39 || keyID == 13) {
+      event.preventDefault(); // prevent default spacebar, single quote and enter
+    } else {
+      if (!typingStarted) {
+        typingStarted = true;
+
+        // store time started and update timer every 100ms
+        timeStarted = new Date();
+        timeInterval = setInterval(
+          updateTime,
+          100,
+          timerBoxEl,
+          wpmBoxEl,
+          timeStarted,
+          numWords
+        );
+      }
     }
 
-    if (!typingStarted) {
-      // started typing a character
-      typingStarted = true;
-
-      // store time started and update timer every 100ms
-      timeStarted = new Date();
-      timeInterval = setInterval(
-        updateTime,
-        100,
-        timerBoxEl,
-        wpmBoxEl,
-        timeStarted,
-        numWords
-      );
-    }
-
+    // correct character typed
     if (keyChar == promptChar) {
-      // correct character typed
       // increment index
       typedIndex++;
 
@@ -86,11 +118,11 @@ window.onload = async function() {
 
     // check if we are finished typing
     if (outputString.length == typingPrompt.length) {
-      clearInterval(timeInterval);
-      wpmBoxEl.style.color = "yellow";
-      timerBoxEl.style.color = "yellow";
+      stopTimer(timeInterval, timerBoxEl, wpmBoxEl);
+      bottomTextEl.hidden = false;
+      typingDone = true;
     }
-  });
+  }); // end keypress event listener
 };
 
 /*
@@ -131,6 +163,34 @@ function updateWPM(timeElapsed, wpmEl, numWords) {
   const minElapsed = timeElapsed / 60;
 
   wpmEl.innerText = "WPM: " + Math.floor(numWords / minElapsed);
+}
+
+/*
+ * Function stops the timer and changes the text color
+ *
+ * @param {Interval} timeInterval - the interval that calls the timer
+ * @param {DOMElement} timerBoxEl - element for timer box
+ * @param {DOMElement} wpmBoxEl - element for wpm box
+ */
+function stopTimer(timeInterval, timerBoxEl, wpmBoxEl) {
+  clearInterval(timeInterval);
+  wpmBoxEl.style.color = "yellow";
+  timerBoxEl.style.color = "yellow";
+  console.log(wpmBoxEl.innerText);
+  console.log(timerBoxEl.innerText);
+}
+
+/*
+ * Function that sets the timer to the default state
+ *
+ * @param {DOMElement} timerBoxEl - element for timer box
+ * @param {DOMElement} wpmBoxEl - element for wpm box
+ */
+function resetTimer(timerBoxEl, wpmBoxEl) {
+  timerBoxEl.innerText = "TIMER: ";
+  wpmBoxEl.innerText = "WPM: ";
+  wpmBoxEl.style.color = "white";
+  timerBoxEl.style.color = "white";
 }
 
 /*

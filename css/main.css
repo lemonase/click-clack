@@ -9,10 +9,15 @@ body {
   font-family: "Courier Prime", monospace;
 }
 
-#heading {
-  font: 3em "Oswald", sans-serif;
+#heading,
+#bottom-text {
+  font: 2.5em "Oswald", sans-serif;
   text-align: center;
   color: yellow;
+}
+
+#bottom-text {
+  margin-top: 5%;
 }
 
 #prompt-display {
