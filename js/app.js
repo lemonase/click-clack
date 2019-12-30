@@ -269,7 +269,7 @@ function spanifyPrompt(promptEl, promptString) {
  */
 async function promptRandomizer() {
   // fetch quotes file
-  const response = await fetch("/data/quotes.json");
+  const response = await fetch("../data/quotes.json");
   const json = await response.json();
 
   const randomQuote = json[Math.floor(Math.random() * json.length)];
