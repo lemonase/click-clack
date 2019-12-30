@@ -23,8 +23,8 @@ body {
 #prompt-display {
   font-size: 2em;
   line-height: 2em;
-  margin-left: 500px;
-  margin-right: 500px;
+  padding-left: 200px;
+  padding-right: 200px;
   text-align: center;
 }
 
