@@ -1,7 +1,8 @@
 // events.js
-import prompt from './prompt.js'
-import timer from './timer.js';
-import ui from './ui.js';
+import prompt from "./prompt.js";
+import timer from "./timer.js";
+import ui from "./ui.js";
+import utils from "./utils.js";
 
 function initEventListeners() {
   // keydown event includes *all* keys
@@ -53,7 +54,7 @@ function initEventListeners() {
           ui.elements.timer,
           ui.elements.wpm,
           prompt.timeStarted,
-          prompt.text.length
+          utils.getNumWords(prompt.text)
         );
       }
     }
@@ -82,4 +83,4 @@ function initEventListeners() {
   }); // end keypress event listener
 } // end event listeners
 
-export default { initEventListeners }
+export default { initEventListeners };

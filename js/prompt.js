@@ -21,7 +21,7 @@ export default prompt = {
   },
   randomizer: async function() {
     // fetch quotes file
-    const response = await fetch("../data/quotes.json");
+    const response = await fetch("./data/quotes.json");
     const json = await response.json();
 
     const randomQuote = json[Math.floor(Math.random() * json.length)];
@@ -66,17 +66,21 @@ export default prompt = {
     }
   },
   reset: async function() {
+    // reset prompt values to default
     this.typedIndex = 0;
     this.timeStarted = 0;
     this.typingStarted = false;
     this.typingDone = false;
     this.timeInterval;
     this.typedString = "";
-
     this.promptEl.innerText = "";
+
+    // get new prompt and title
     this.text = await this.randomizer();
     this.letters = utils.spanifyPrompt(this.promptEl, this.text);
+    ui.elements.heading.innerText = utils.titleRandomizer();
 
+    // update the prompt
     this.update(true);
   }
 };

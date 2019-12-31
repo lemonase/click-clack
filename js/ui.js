@@ -15,4 +15,3 @@ function init() {
 }
 
 export default { elements, init };
-

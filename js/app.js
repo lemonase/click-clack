@@ -1,11 +1,10 @@
 // app.js
-import * as prompt from "./prompt.js";
-import events from './events.js';
 import ui from "./ui.js";
+import events from "./events.js";
+import * as prompt from "./prompt.js";
 
 window.onload = function() {
-  events.initEventListeners();
   ui.init();
+  events.initEventListeners();
   prompt.init();
 };
-
