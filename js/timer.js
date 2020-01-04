@@ -9,7 +9,7 @@ function stopTimer(timeInterval, timerBoxEl, wpmBoxEl) {
 }
 
 function resetTimer(timerBoxEl, wpmBoxEl) {
-  timerBoxEl.innerText = "TIMER: ";
+  timerBoxEl.innerText = "TIME: ";
   wpmBoxEl.innerText = "WPM: ";
   wpmBoxEl.style.color = "white";
   timerBoxEl.style.color = "white";

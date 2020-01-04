@@ -11,6 +11,8 @@ let elements = {
 
 function init() {
   elements.heading.innerText = utils.titleRandomizer();
+  elements.timer.innerText = "TIME: ";
+  elements.wpm.innerText = "WPM: ";
   elements.bottomText.hidden = true;
 }
 
