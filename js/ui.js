@@ -1,5 +1,4 @@
-// ui.js
-import utils from "./utils.js";
+import utils from './utils.js';
 
 let elements = {
   heading: document.getElementById("heading"),

@@ -1,8 +1,7 @@
-// events.js
-import prompt from "./prompt.js";
-import timer from "./timer.js";
-import ui from "./ui.js";
-import utils from "./utils.js";
+import prompt from './prompt.js';
+import timer from './timer.js';
+import ui from './ui.js';
+import utils from './utils.js';
 
 function initEventListeners() {
   // keydown event includes *all* keys
@@ -28,7 +27,6 @@ function initEventListeners() {
     if (event.keyCode == 13 && prompt.typingDone) {
       timer.resetTimer(ui.elements.timer, ui.elements.wpm);
       prompt.reset();
-      ui.elements.bottomText.hidden = true;
     }
   }); // end keydown event listener
 
