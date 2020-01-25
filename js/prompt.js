@@ -1,4 +1,5 @@
 // prompt.js
+
 import utils from "./utils.js";
 import ui from "./ui.js";
 
@@ -24,6 +25,7 @@ export default prompt = {
     const response = await fetch("./data/quotes.json");
     const json = await response.json();
 
+    // grab a random quote and the text from that quote
     const randomQuote = json[Math.floor(Math.random() * json.length)];
     const fullText = randomQuote.quoteText + " - " + randomQuote.quoteAuthor;
 

@@ -28,4 +28,8 @@ function updateWPM(timeElapsed, wpmEl, numWords) {
   wpmEl.innerText = "WPM: " + Math.floor(numWords / minElapsed);
 }
 
-export default { stopTimer, resetTimer, updateTime };
+export default {
+  stopTimer,
+  resetTimer,
+  updateTime
+};

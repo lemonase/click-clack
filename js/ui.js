@@ -1,4 +1,5 @@
 // ui.js
+
 import utils from "./utils.js";
 
 let elements = {
@@ -16,4 +17,7 @@ function init() {
   elements.bottomText.hidden = true;
 }
 
-export default { elements, init };
+export default {
+  elements,
+  init
+};

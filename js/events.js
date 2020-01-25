@@ -1,4 +1,5 @@
 // events.js
+
 import prompt from "./prompt.js";
 import timer from "./timer.js";
 import ui from "./ui.js";
@@ -7,8 +8,8 @@ import utils from "./utils.js";
 function initEventListeners() {
   // keydown event includes *all* keys
   document.addEventListener("keydown", event => {
+    // <backspace key> pressed
     if (event.keyCode == 8) {
-      // <backspace key>
       event.preventDefault();
 
       // remove last character from string
@@ -23,8 +24,7 @@ function initEventListeners() {
       prompt.update(true);
     }
 
-    // <enter key>
-    // if we are done typing, reset
+    // <enter key> pressed
     if (event.keyCode == 13 && prompt.typingDone) {
       timer.resetTimer(ui.elements.timer, ui.elements.wpm);
       prompt.reset();
@@ -40,8 +40,9 @@ function initEventListeners() {
     // update the current character
     prompt.curChar = prompt.text[prompt.typedIndex];
 
+    // prevent default behavior of spacebar, single quote and enter
     if (keyID == 32 || keyID == 39 || keyID == 13) {
-      event.preventDefault(); // prevent default spacebar, single quote and enter
+      event.preventDefault();
     } else {
       if (!prompt.typingStarted) {
         prompt.typingStarted = true;
@@ -83,4 +84,6 @@ function initEventListeners() {
   }); // end keypress event listener
 } // end event listeners
 
-export default { initEventListeners };
+export default {
+  initEventListeners
+};

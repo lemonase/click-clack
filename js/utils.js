@@ -41,4 +41,8 @@ function spanifyPrompt(promptEl, promptString) {
   return charEls;
 }
 
-export default { getNumWords, titleRandomizer, spanifyPrompt };
+export default {
+  getNumWords,
+  titleRandomizer,
+  spanifyPrompt
+};
