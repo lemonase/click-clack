@@ -77,10 +77,13 @@ export default prompt = {
     this.typedString = "";
     this.promptEl.innerText = "";
 
-    // get new prompt and title
+    // get new prompt and split into letters
     this.text = await this.randomizer();
     this.letters = utils.spanifyPrompt(this.promptEl, this.text);
+
+    // reset ui elements
     ui.elements.heading.innerText = utils.titleRandomizer();
+    ui.elements.bottomText.hidden = true;
 
     // update the prompt
     this.update(true);

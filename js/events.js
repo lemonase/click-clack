@@ -28,7 +28,6 @@ function initEventListeners() {
     if (event.keyCode == 13 && prompt.typingDone) {
       timer.resetTimer(ui.elements.timer, ui.elements.wpm);
       prompt.reset();
-      ui.elements.bottomText.hidden = true;
     }
   }); // end keydown event listener
 

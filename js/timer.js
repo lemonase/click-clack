@@ -1,5 +1,3 @@
-// timer.js
-
 function stopTimer(timeInterval, timerBoxEl, wpmBoxEl) {
   clearInterval(timeInterval);
   wpmBoxEl.style.color = "yellow";

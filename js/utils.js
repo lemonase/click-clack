@@ -1,5 +1,3 @@
-// utils.js
-
 function getNumWords(inputString) {
   return inputString.split(" ").length;
 }
