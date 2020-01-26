@@ -1,6 +1,7 @@
 // ui.js
 
 import utils from "./utils.js";
+import * as prompt from "./prompt.js";
 
 let elements = {
   heading: document.getElementById("heading"),
@@ -15,6 +16,8 @@ function init() {
   elements.timer.innerText = "TIME: ";
   elements.wpm.innerText = "WPM: ";
   elements.bottomText.hidden = true;
+
+  prompt.init();
 }
 
 export default {
