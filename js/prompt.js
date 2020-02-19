@@ -29,7 +29,7 @@ export default prompt = {
     const randomQuote = json[Math.floor(Math.random() * json.length)];
     const fullText = randomQuote.quoteText + " - " + randomQuote.quoteAuthor;
 
-    // not all quotes have authors
+    // not all quotes have an author field
     if (randomQuote.quoteAuthor) {
       return fullText;
     } else {
@@ -65,6 +65,7 @@ export default prompt = {
 
     if (this.nextChar) {
       this.nextChar.style.color = this.color.defaultColor;
+      this.nextChar.classList.remove("cursor");
     }
   },
   reset: async function() {
