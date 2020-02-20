@@ -1,4 +1,20 @@
-/* @import url("https://fonts.googleapis.com/css?family=Courier+Prime|Oswald&display=swap"); */
+/* Fonts */
+@font-face {
+  font-family: "Courier Prime";
+  src: url("../fonts/Courier_Prime/CourierPrime-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("../fonts/Open_Sans/OpenSans-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Arvo";
+  src: url("../fonts/Arvo/Arvo-Regular.ttf");
+}
+
+/* Main */
 html,
 body {
   background-color: black;
@@ -11,9 +27,9 @@ body {
 
 #heading,
 #bottom-text {
-  font: 2.5em "Oswald", sans-serif;
+  font: 2.5em "Arvo", sans-serif;
   text-align: center;
-  color: yellow;
+  color: rgb(19, 168, 253);
 }
 
 #bottom-text {
@@ -49,7 +65,7 @@ body {
 }
 
 .cursor {
-  border-bottom: 3px solid;
+  font-size: 3em;
 }
 
 .space {

@@ -28,9 +28,6 @@ function spanifyPrompt(promptEl, promptString) {
   for (let i = 0; i < promptString.length; i++) {
     const charEl = document.createElement("span");
     charEl.innerText = promptString[i];
-    if (promptString[i] == " ") {
-      charEl.classList.add("space");
-    }
     charEls.push(charEl);
 
     promptEl.appendChild(charEl);

@@ -15,7 +15,7 @@ export default prompt = {
   typedString: "",
   text: "",
   color: {
-    goodColor: "#26ff00",
+    goodColor: "#27e820",
     badColor: "#f93636",
     currentColor: "yellow",
     defaultColor: "white"
@@ -54,8 +54,7 @@ export default prompt = {
       if (this.curChar && correctChar) {
         this.curChar.style.color = this.color.currentColor;
         if (this.curChar.innerText == " ") {
-          this.curChar.style.borderBottom =
-            "5px dotted" + this.color.currentColor;
+          this.curChar.classList.add("space");
         }
         this.curChar.classList.add("cursor");
       } else if (this.curChar) {
