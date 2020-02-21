@@ -4,8 +4,8 @@ function stopTimer(timeInterval, timerBoxEl, wpmBoxEl) {
   clearInterval(timeInterval);
   wpmBoxEl.style.color = "yellow";
   timerBoxEl.style.color = "yellow";
-  console.log(wpmBoxEl.innerText);
-  console.log(timerBoxEl.innerText);
+  // console.log(wpmBoxEl.innerText);
+  // console.log(timerBoxEl.innerText);
 }
 
 function resetTimer(timerBoxEl, wpmBoxEl) {
@@ -16,14 +16,14 @@ function resetTimer(timerBoxEl, wpmBoxEl) {
 }
 
 function updateTime(timeEl, wpmEl, startTime, numWords) {
-  const timePassed = (new Date() - startTime) / 1000;
+  const timePassed = ((new Date() - startTime) / 1000).toFixed(2);
   updateWPM(timePassed, wpmEl, numWords);
   timeEl.innerText = "TIME: " + timePassed + " sec";
 }
 
 function updateWPM(timeElapsed, wpmEl, numWords) {
   const minElapsed = timeElapsed / 60;
-  wpmEl.innerText = "WPM: " + Math.floor(numWords / minElapsed);
+  wpmEl.innerText = "WPM: " + Math.round(numWords / minElapsed);
 }
 
 export default {

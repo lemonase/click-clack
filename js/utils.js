@@ -1,8 +1,10 @@
+import quotes from "./quoteData.js";
+
 function getNumWords(inputString) {
   return inputString.split(" ").length;
 }
 
-function titleRandomizer() {
+function getRandomTitle() {
   const titles = [
     "TYPE IT UP",
     "I AIN'T GOT NO TYPE",
@@ -22,6 +24,23 @@ function titleRandomizer() {
   return titles[Math.floor(Math.random() * titles.length)];
 }
 
+function getRandomQuote() {
+  const randomQuote =
+    quotes.data[Math.floor(Math.random() * quotes.data.length)];
+  const fullText = randomQuote.quoteText + " - " + randomQuote.quoteAuthor;
+
+  // not all quotes have an author field
+  if (randomQuote.quoteAuthor) {
+    return fullText;
+  } else {
+    return randomQuote.quoteText;
+  }
+}
+
+function getQuoteData() {
+  return quotes.data;
+}
+
 function spanifyPrompt(promptEl, promptString) {
   const charEls = [];
 
@@ -38,6 +57,8 @@ function spanifyPrompt(promptEl, promptString) {
 
 export default {
   getNumWords,
-  titleRandomizer,
-  spanifyPrompt
+  getRandomTitle,
+  getRandomQuote,
+  spanifyPrompt,
+  getQuoteData
 };

@@ -8,13 +8,19 @@
 
   <body>
     <h1 id="heading"></h1>
+    <div id="quote-list"></div>
     <div id="prompt-display"></div>
     <span class="side-box">
       <div id="timer-box" class="metric"></div>
       <div id="wpm-box" class="metric"></div>
+      <div class="buttons" hidden="true">
+        <button id="quote-list-button" class="btn">
+          See quote list
+        </button>
+      </div>
     </span>
     <div id="bottom-text" hidden="true">
-      Press [ Enter ] for the next prompt
+      Press [ Enter ] for the next prompt or [ Tab ] to reset.
     </div>
     <script type="module" src="js/app.js"></script>
   </body>

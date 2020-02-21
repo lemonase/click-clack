@@ -1,12 +1,10 @@
 // events.js
 
 import prompt from "./prompt.js";
-import timer from "./timer.js";
 import ui from "./ui.js";
-import utils from "./utils.js";
 
 function initEventListeners() {
-  // keydown event includes *all* keys
+  // keydown event includes *all* keys (including modifiers)
   document.addEventListener("keydown", event => {
     // <backspace key> pressed
     if (event.keyCode == 8) {
@@ -24,10 +22,15 @@ function initEventListeners() {
       prompt.update(true);
     }
 
-    // <enter key> pressed
-    if (event.keyCode == 13 && prompt.typingDone) {
-      timer.resetTimer(ui.elements.timer, ui.elements.wpm);
+    // <enter key> pressed, new prompt
+    if (event.keyCode == 13) {
       prompt.reset();
+      console.log("Enter");
+    }
+    // <tab key> pressed, reset prompt
+    else if (event.keyCode == 9) {
+      event.preventDefault();
+      prompt.reset(prompt.text);
     }
   }); // end keydown event listener
 
@@ -36,51 +39,39 @@ function initEventListeners() {
     const keyChar = event.key;
     const keyID = event.keyCode;
 
-    // update the current character
     prompt.curChar = prompt.text[prompt.typedIndex];
 
     // prevent default behavior of spacebar, single quote and enter
     if (keyID == 32 || keyID == 39 || keyID == 13) {
       event.preventDefault();
-    } else {
+    }
+    // otherwise start timer if typing has commenced
+    else {
       if (!prompt.typingStarted) {
         prompt.typingStarted = true;
-
-        // store time started and update timer every 100ms
-        prompt.timeStarted = new Date();
-        prompt.timeInterval = setInterval(
-          timer.updateTime,
-          100,
-          ui.elements.timer,
-          ui.elements.wpm,
-          prompt.timeStarted,
-          utils.getNumWords(prompt.text)
-        );
+        prompt.start();
       }
     }
 
-    // correct character typed
+    // correct character?
     if (keyChar == prompt.curChar) {
-      // increment index
       prompt.typedIndex++;
-
-      // append typed char to the typed string
       prompt.typedString += keyChar;
-
-      // update cursor position
       prompt.update(true);
-    } else {
-      // wrong character typed
+    } else if (keyID != 32 && keyID != 39 && keyID != 13) {
       prompt.update(false);
     }
 
-    // check if we are finished typing
+    // end of prompt?
     if (prompt.typedString.length == prompt.text.length) {
-      timer.stopTimer(prompt.timeInterval, ui.elements.timer, ui.elements.wpm);
-      ui.elements.bottomText.hidden = false;
-      prompt.typingDone = true;
+      prompt.stop();
     }
   }); // end keypress event listener
+
+  ui.elements.quoteListButton.addEventListener("click", event => {
+    ui.hideScreenElements();
+    ui.displayQuoteList();
+  });
 } // end event listeners
 
 export default {

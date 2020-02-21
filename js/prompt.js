@@ -1,7 +1,8 @@
 // prompt.js
 
-import utils from "./utils.js";
+import timer from "./timer.js";
 import ui from "./ui.js";
+import utils from "./utils.js";
 
 export default prompt = {
   typedIndex: 0,
@@ -20,32 +21,12 @@ export default prompt = {
     currentColor: "yellow",
     defaultColor: "white"
   },
-  randomizer: async function() {
-    // fetch quotes file
-    const response = await fetch("./data/quotes.json");
-    const json = await response.json();
-
-    // grab a random quote and the text from that quote
-    const randomQuote = json[Math.floor(Math.random() * json.length)];
-    const fullText = randomQuote.quoteText + " - " + randomQuote.quoteAuthor;
-
-    // not all quotes have an author field
-    if (randomQuote.quoteAuthor) {
-      return fullText;
-    } else {
-      return randomQuote.quoteText;
-    }
-  },
   update: function(correctChar) {
     this.prevChar = this.letters[this.typedIndex - 1];
     this.curChar = this.letters[this.typedIndex];
     this.nextChar = this.letters[this.typedIndex + 1];
 
     if (this.prevChar) {
-      if (this.prevChar.innerText == " ") {
-        this.prevChar.style.borderBottom =
-          "5px dotted" + this.color.defaultColor;
-      }
       this.prevChar.style.color = this.color.goodColor;
       this.prevChar.classList.remove("cursor");
     }
@@ -53,9 +34,6 @@ export default prompt = {
     if (this.curChar !== "undefined") {
       if (this.curChar && correctChar) {
         this.curChar.style.color = this.color.currentColor;
-        if (this.curChar.innerText == " ") {
-          this.curChar.classList.add("space");
-        }
         this.curChar.classList.add("cursor");
       } else if (this.curChar) {
         this.curChar.style.color = this.color.badColor;
@@ -67,7 +45,7 @@ export default prompt = {
       this.nextChar.classList.remove("cursor");
     }
   },
-  reset: async function() {
+  reset: async function(text) {
     // reset prompt values to default
     this.typedIndex = 0;
     this.timeStarted = 0;
@@ -77,16 +55,39 @@ export default prompt = {
     this.typedString = "";
     this.promptEl.innerText = "";
 
+    timer.stopTimer(this.timeInterval, ui.elements.timer, ui.elements.wpm);
+    timer.resetTimer(ui.elements.timer, ui.elements.wpm);
+
     // get new prompt and split into letters
-    this.text = await this.randomizer();
+    if (text) {
+      this.text = text;
+    } else {
+      this.text = utils.getRandomQuote();
+    }
+
     this.letters = utils.spanifyPrompt(this.promptEl, this.text);
 
     // reset ui elements
-    ui.elements.heading.innerText = utils.titleRandomizer();
-    ui.elements.bottomText.hidden = true;
+    ui.elements.heading.innerText = utils.getRandomTitle();
 
     // update the prompt
     this.update(true);
+  },
+  start: function() {
+    this.timeStarted = new Date();
+    this.timeInterval = setInterval(
+      timer.updateTime,
+      100,
+      ui.elements.timer,
+      ui.elements.wpm,
+      this.timeStarted,
+      utils.getNumWords(this.text)
+    );
+  },
+  stop: function() {
+    timer.stopTimer(this.timeInterval, ui.elements.timer, ui.elements.wpm);
+    ui.elements.bottomText.hidden = false;
+    this.typingDone = true;
   }
 };
 
@@ -95,11 +96,14 @@ export async function init() {
   prompt.promptEl = ui.elements.prompt;
 
   // set prompt text to random quote
-  prompt.text = await prompt.randomizer();
+  prompt.text = utils.getRandomQuote();
 
   // returns an array of spans for each letter in prompt.text
   prompt.letters = utils.spanifyPrompt(prompt.promptEl, prompt.text);
 
   // highlight first letter
   prompt.update(true);
+
+  // show ui after prompt loads
+  ui.showScreenElements();
 }
