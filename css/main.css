@@ -1,20 +1,7 @@
-/* Fonts */
-@font-face {
-  font-family: "Courier Prime";
-  src: url("../fonts/Courier_Prime/CourierPrime-Regular.ttf");
-}
-
-@font-face {
-  font-family: "Open Sans";
-  src: url("../fonts/Open_Sans/OpenSans-Regular.ttf");
-}
-
-@font-face {
-  font-family: "Arvo";
-  src: url("../fonts/Arvo/Arvo-Regular.ttf");
-}
-
+/********/
 /* Main */
+/********/
+
 html,
 body {
   background-color: black;
@@ -87,4 +74,50 @@ body {
 
 .space {
   border-bottom: 5px dotted;
+}
+
+/*********/
+/* Fonts */
+/*********/
+
+/* Courier Prime */
+@font-face {
+  font-family: "Courier Prime";
+  src: url("../fonts/Courier_Prime/CourierPrime-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Courier Prime Italic";
+  src: url("../fonts/Courier_prime/CourierPrime-Italic.ttf");
+}
+
+@font-face {
+  font-family: "Courier Prime Bold";
+  src: url("../fonts/Courier_prime/CourierPrime-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Courier Prime Bold Italic";
+  src: url("../fonts/Courier_prime/CourierPrime-BoldItalic.ttf");
+}
+
+/* Arvo */
+@font-face {
+  font-family: "Arvo";
+  src: url("../fonts/Arvo/Arvo-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Arvo Italic";
+  src: url("../fonts/Arvo/Arvo-Italic.ttf");
+}
+
+@font-face {
+  font-family: "Arvo Bold";
+  src: url("../fonts/Arvo/Arvo-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Arvo Bold Italic";
+  src: url("../fonts/Arvo/Arvo-BoldItalic.ttf");
 }
