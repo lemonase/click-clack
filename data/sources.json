@@ -1,0 +1,7 @@
+{
+	[
+		"quotes": "./literature/quotes.json",
+		"bin": "./programming/linux-commands/bin.json",
+		"sbin": "./programming/linux-commands/sbin.json"
+	]
+}
