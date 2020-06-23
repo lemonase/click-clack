@@ -4,9 +4,8 @@
   "description": "A simple typing game",
   "main": "index.js",
   "scripts": {
-    "serve": "./node_modules/live-server/live-server.js .",
-    "server": "./node_modules/live-server/live-server.js .",
-    "lint": "./node_modules/eslint/bin/eslint.js js/*.js"
+    "start": "./node_modules/live-server/live-server.js .",
+    "server": "./node_modules/live-server/live-server.js ."
   },
   "repository": {
     "type": "git",
@@ -19,29 +18,14 @@
     "test"
   ],
   "author": "James Dixon",
-  "license": "Apache",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/lemonase/click-clack/issues"
   },
   "homepage": "https://github.com/lemonase/click-clack#readme",
   "devDependencies": {
-    "eslint": "^7.3.1",
-    "jshint": "^2.11.1",
-    "live-server": "^1.2.1"
+    "live-server": "^1.2.1",
+    "standard": "^14.3.4"
   },
-  "eslintConfig": {
-    "env": {
-      "browser": true,
-      "node": true
-    },
-    "parserOptions": {
-      "ecmaVersion": 6
-    },
-    "rules": {
-      "quotes": [
-        "error",
-        "single"
-      ]
-    }
-  }
+  "dependencies": {}
 }
