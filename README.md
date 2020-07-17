@@ -4,7 +4,7 @@ Click clack is a simple typing game to measure your typing speed.
 
 ## Running Development Server
 
-```
+```shell
 npm install -D
 npm run server
 ```

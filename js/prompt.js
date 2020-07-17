@@ -1,109 +1,109 @@
-import timer from './timer.js'
-import ui from './ui.js'
-import utils from './utils.js'
+import timer from "./timer.js";
+import ui from "./ui.js";
+import utils from "./utils.js";
 
-var prompt = {}
+var prompt = {};
 
 export default prompt = {
   typedIndex: 0,
-  nextChar: '',
-  curChar: '',
-  prevChar: '',
+  nextChar: "",
+  curChar: "",
+  prevChar: "",
   timeStarted: 0,
   timeInterval: 0,
   typingStarted: false,
   typingDone: false,
-  typedString: '',
-  text: '',
-  color: {
-    goodColor: '#27e820',
-    badColor: '#f93636',
-    currentColor: 'yellow',
-    defaultColor: 'white'
-  },
+  typedString: "",
+  text: "",
   update: function (correctChar) {
-    this.prevChar = this.letters[this.typedIndex - 1]
-    this.curChar = this.letters[this.typedIndex]
-    this.nextChar = this.letters[this.typedIndex + 1]
+    this.prevChar = this.letters[this.typedIndex - 1];
+    this.curChar = this.letters[this.typedIndex];
+    this.nextChar = this.letters[this.typedIndex + 1];
 
     if (this.prevChar) {
-      this.prevChar.style.color = this.color.goodColor
-      this.prevChar.classList.remove('cursor')
+      this.prevChar.classList.add("cursor-correct");
+      this.prevChar.classList.remove("cursor");
     }
 
-    if (this.curChar !== 'undefined') {
+    if (this.curChar !== "undefined") {
       if (this.curChar && correctChar) {
-        this.curChar.style.color = this.color.currentColor
-        this.curChar.classList.add('cursor')
+        this.curChar.classList.add("cursor");
       } else if (this.curChar) {
-        this.curChar.style.color = this.color.badColor
+        this.curChar.classList.add("cursor-wrong");
       }
     }
 
     if (this.nextChar) {
-      this.nextChar.style.color = this.color.defaultColor
-      this.nextChar.classList.remove('cursor')
+      this.nextChar.classList.remove("cursor");
     }
   },
   reset: async function (text) {
     // reset prompt values to default
-    this.typedIndex = 0
-    this.timeStarted = 0
-    this.typingStarted = false
-    this.typingDone = false
-    this.timeInterval
-    this.typedString = ''
-    this.promptEl.innerText = ''
+    this.typedIndex = 0;
+    this.timeStarted = 0;
+    this.typingStarted = false;
+    this.typingDone = false;
+    this.timeInterval;
+    this.typedString = "";
+    this.promptEl.innerText = "";
 
-    timer.stopTimer(this.timeInterval, ui.elements.timer, ui.elements.wpm)
-    timer.resetTimer(ui.elements.timer, ui.elements.wpm)
+    timer.stopTimer(
+      this.timeInterval,
+      ui.promptScreenElements.timer,
+      ui.promptScreenElements.wpm
+    );
+    timer.resetTimer(
+      ui.promptScreenElements.timer,
+      ui.promptScreenElements.wpm
+    );
 
     // get new prompt and split into letters
     if (text) {
-      this.text = text
+      this.text = text;
     } else {
-      this.text = utils.getRandomQuote()
+      this.text = utils.getRandomQuote();
     }
 
-    this.letters = utils.spanifyPrompt(this.promptEl, this.text)
+    this.letters = utils.spanifyPrompt(this.promptEl, this.text);
 
     // reset ui elements
-    ui.elements.heading.innerText = utils.getRandomTitle()
+    ui.promptScreenElements.heading.innerText = utils.getRandomTitle();
 
     // update the prompt
-    this.update(true)
+    this.update(true);
+
+    // hide bottom text and scrollbar
+    document.body.style.overflow = "hidden";
+    ui.promptScreenElements.bottomText.style.display = "none";
   },
   start: function () {
-    this.timeStarted = new Date()
+    this.timeStarted = new Date();
     this.timeInterval = setInterval(
       timer.updateTime,
       100,
-      ui.elements.timer,
-      ui.elements.wpm,
+      ui.promptScreenElements.timer,
+      ui.promptScreenElements.wpm,
       this.timeStarted,
       utils.getNumWords(this.text)
-    )
+    );
   },
   stop: function () {
-    timer.stopTimer(this.timeInterval, ui.elements.timer, ui.elements.wpm)
-    ui.elements.bottomText.hidden = false
-    this.typingDone = true
-  }
-}
+    timer.stopTimer(
+      this.timeInterval,
+      ui.promptScreenElements.timer,
+      ui.promptScreenElements.wpm
+    );
+    ui.promptScreenElements.bottomText.style.display = "block";
+    this.typingDone = true;
+  },
+  display: function () {
+    // grab prompt element from ui
+    this.promptEl = ui.promptScreenElements.prompt;
 
-export async function init () {
-  // grab prompt element from ui
-  prompt.promptEl = ui.elements.prompt
+    // reset data
+    this.reset();
 
-  // set prompt text to random quote
-  prompt.text = utils.getRandomQuote()
-
-  // returns an array of spans for each letter in prompt.text
-  prompt.letters = utils.spanifyPrompt(prompt.promptEl, prompt.text)
-
-  // highlight first letter
-  prompt.update(true)
-
-  // show ui after prompt loads
-  ui.showScreenElements()
-}
+    // show ui after prompt loads
+    ui.showScreenElements(ui.promptScreenElements);
+  },
+};

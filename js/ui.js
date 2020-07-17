@@ -1,86 +1,113 @@
-import utils from './utils.js'
-import * as prompt from './prompt.js'
+import utils from "./utils.js";
+import * as prompt from "./prompt.js";
 
-const elements = {
-  heading: document.getElementById('heading'),
-  prompt: document.getElementById('prompt-display'),
-  timer: document.getElementById('timer-box'),
-  wpm: document.getElementById('wpm-box'),
-  bottomText: document.getElementById('bottom-text'),
-  quoteListButton: document.getElementById('quote-list-button'),
-  buttons: document.querySelector('.buttons')
-}
+const promptScreenElements = {
+  timer: document.getElementById("timer-box"),
+  wpm: document.getElementById("wpm-box"),
+  heading: document.getElementById("heading"),
+  prompt: document.getElementById("prompt-display"),
+  bottomText: document.getElementById("bottom-text"),
+  quoteListButton: document.getElementById("quote-list-button"),
+  buttons: document.querySelector(".buttons"),
+};
 
-function init () {
-  prompt.init()
+const quoteListElements = {
+  quoteList: document.getElementById("quote-list"),
+};
 
-  elements.heading.innerText = utils.getRandomTitle()
-  elements.timer.innerText = 'TIME: '
-  elements.wpm.innerText = 'WPM: '
-}
-
-function hideScreenElements () {
-  for (const key of Object.keys(elements)) {
-    const el = elements[key]
-    el.hidden = true
+function hideScreenElements(screenElements) {
+  for (const key of Object.keys(screenElements)) {
+    const el = screenElements[key];
+    el.hidden = true;
   }
 }
 
-function showScreenElements () {
-  for (const key of Object.keys(elements)) {
-    const el = elements[key]
-    el.hidden = false
+function showScreenElements(screenElements) {
+  for (const key of Object.keys(screenElements)) {
+    const el = screenElements[key];
+    el.hidden = false;
   }
 }
 
-async function displayQuoteList () {
-  const quoteList = document.getElementById('quote-list')
-  const json = utils.getQuoteData()
+function init() {
+  // set heading elements
+  promptScreenElements.heading.innerText = utils.getRandomTitle();
+  promptScreenElements.timer.innerText = "TIME: ";
+  promptScreenElements.wpm.innerText = "WPM: ";
 
-  document.body.style.overflow = 'scroll'
-  quoteList.hidden = false
+  prompt.default.display();
+}
+
+async function displayQuoteList() {
+  hideScreenElements(promptScreenElements);
+
+  let quoteList = quoteListElements.quoteList;
+  const json = utils.getQuoteData();
+
+  let backBtn = document.querySelector("#quote-list-back-button");
+  if (!backBtn) {
+    backBtn = document.createElement("button");
+    backBtn.classList.add("btn");
+    backBtn.style.position = "fixed";
+    backBtn.style.right = "10%";
+    backBtn.innerText = "Back To Prompt";
+    backBtn.id = "quote-list-back-button";
+    document.body.prepend(backBtn);
+  }
+  document.body.style.overflow = "scroll";
+  backBtn.style.display = "inline-flex";
+
+  backBtn.addEventListener("click", (e) => {
+    hideScreenElements(quoteListElements);
+    e.target.style.display = "none";
+    prompt.default.display();
+  });
 
   if (quoteList.childElementCount === 0) {
     for (let i = 0; i < json.length; i++) {
-      const listItem = document.createElement('li')
-      listItem.style.marginBottom = '20px'
-      listItem.style.paddingBottom = '20px'
-      listItem.style.cursor = 'pointer'
+      const listItem = document.createElement("li");
+      listItem.style.marginBottom = "20px";
+      listItem.style.paddingBottom = "20px";
+      listItem.style.cursor = "pointer";
 
-      let fullText = ''
+      let fullText = "";
       if (json[i].quoteAuthor) {
-        fullText = json[i].quoteText + ' - ' + json[i].quoteAuthor
+        fullText = json[i].quoteText + " - " + json[i].quoteAuthor;
       } else {
-        fullText = json[i].quoteText
+        fullText = json[i].quoteText;
       }
 
       listItem.innerText =
-        json[i].quoteText + '\n - ' + json[i].quoteAuthor + '\n'
+        json[i].quoteText + "\n - " + json[i].quoteAuthor + "\n";
 
-      listItem.addEventListener('mouseover', event => {
-        event.target.style.color = 'yellow'
-      })
+      listItem.addEventListener("mouseover", (event) => {
+        event.target.style.color = "yellow";
+      });
 
-      listItem.addEventListener('mouseleave', event => {
-        event.target.style.color = 'white'
-      })
+      listItem.addEventListener("mouseleave", (event) => {
+        event.target.style.color = "white";
+      });
 
-      listItem.addEventListener('click', event => {
-        console.log(event.target.innerText)
-        prompt.default.reset(fullText)
-        quoteList.hidden = true
-        showScreenElements()
-      })
+      listItem.addEventListener("click", (event) => {
+        prompt.default.reset(fullText);
+        hideScreenElements(quoteListElements);
+        backBtn.style.display = "none";
 
-      quoteList.appendChild(listItem)
+        showScreenElements(promptScreenElements);
+      });
+
+      quoteList.appendChild(listItem);
     }
+  } else {
+    showScreenElements(quoteListElements);
   }
 }
 
 export default {
-  elements,
+  promptScreenElements,
+  quoteListElements,
   init,
   hideScreenElements,
   showScreenElements,
-  displayQuoteList
-}
+  displayQuoteList,
+};
