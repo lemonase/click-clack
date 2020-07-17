@@ -27,6 +27,9 @@ export default prompt = {
 
     if (this.curChar !== "undefined") {
       if (this.curChar && correctChar) {
+        this.curChar.classList.remove("cursor-correct");
+        this.curChar.classList.remove("cursor-wrong");
+
         this.curChar.classList.add("cursor");
       } else if (this.curChar) {
         this.curChar.classList.add("cursor-wrong");
@@ -47,6 +50,7 @@ export default prompt = {
     this.typedString = "";
     this.promptEl.innerText = "";
 
+    // timers
     timer.stopTimer(
       this.timeInterval,
       ui.promptScreenElements.timer,
@@ -64,6 +68,7 @@ export default prompt = {
       this.text = utils.getRandomQuote();
     }
 
+    // make each letter of text a span element for styling
     this.letters = utils.spanifyPrompt(this.promptEl, this.text);
 
     // reset ui elements
@@ -100,7 +105,7 @@ export default prompt = {
     // grab prompt element from ui
     this.promptEl = ui.promptScreenElements.prompt;
 
-    // reset data
+    // reset or initialize data
     this.reset();
 
     // show ui after prompt loads

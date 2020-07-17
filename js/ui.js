@@ -35,6 +35,7 @@ function init() {
   promptScreenElements.timer.innerText = "TIME: ";
   promptScreenElements.wpm.innerText = "WPM: ";
 
+  // display all the elements of the prompt
   prompt.default.display();
 }
 
@@ -54,7 +55,7 @@ async function displayQuoteList() {
     backBtn.id = "quote-list-back-button";
     document.body.prepend(backBtn);
   }
-  document.body.style.overflow = "scroll";
+  document.body.style.overflow = "auto";
   backBtn.style.display = "inline-flex";
 
   backBtn.addEventListener("click", (e) => {
