@@ -45,14 +45,6 @@ export default prompt = {
       }
     }
 
-    if (this.nextChar) {
-      // this.curChar.classList.remove("cursor-wrong");
-      // this.curChar.classList.remove("cursor-correct");
-      // this.curChar.classList.remove("cursor");
-    }
-
-    // console.log((this.typedIndex / this.text.length) * 100);
-
     ui.updateProgressBar((this.typedIndex / this.text.length) * 100);
   },
   reset: async function (text) {
