@@ -9,7 +9,22 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  margin: 0;
   font-family: "Courier Prime", monospace;
+}
+
+#progress-bar {
+  width: 100%;
+  margin: 0px;
+  height: 5px;
+  background-color: white;
+}
+
+#progress-bar-inner {
+  background-color: rgb(72, 255, 66);
+  height: 5px;
+  transition-property: width;
+  transition-duration: 0.5s;
 }
 
 #heading,
@@ -26,32 +41,22 @@ body {
 #prompt-display {
   font-size: 2em;
   line-height: 2em;
-  padding-left: 200px;
-  padding-right: 200px;
-  padding-top: 10%;
-  padding-bottom: 10%;
-  margin: auto;
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 5%;
+  margin-bottom: 5%;
   text-align: center;
 }
 
-#timer-box {
-  top: 10px;
-}
-
-#wpm-box {
-  top: 40px;
-}
-
 /* Classes */
+
 .side-box {
+  top: 5%;
   font-size: 1.2em;
 }
 
 .metric {
-  position: fixed;
   font-size: 1.5em;
-  margin-bottom: 30px;
-  padding-bottom: 10px;
 }
 
 .btn {
@@ -70,19 +75,23 @@ body {
 
 .cursor {
   color: #f8f522;
-  font-size: 2.5rem;
+  font-weight: bold;
 }
 
 .cursor-wrong {
+  transition-property: color;
+  transition-duration: 0.2s;
   color: #f93636;
 }
 
 .cursor-correct {
+  transition-property: color;
+  transition-duration: 0.2s;
   color: rgb(72, 255, 66);
 }
 
-.space {
-  border-bottom: 5px dotted;
+.cursor-space {
+  border-bottom: 3px dotted;
 }
 
 /*********/

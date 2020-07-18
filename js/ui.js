@@ -7,6 +7,8 @@ const promptScreenElements = {
   heading: document.getElementById("heading"),
   prompt: document.getElementById("prompt-display"),
   bottomText: document.getElementById("bottom-text"),
+  progressBar: document.getElementById("progress-bar"),
+  progressBarInner: document.getElementById("progress-bar-inner"),
   quoteListButton: document.getElementById("quote-list-button"),
   buttons: document.querySelector(".buttons"),
 };
@@ -29,7 +31,11 @@ function showScreenElements(screenElements) {
   }
 }
 
-function init() {
+function updateProgressBar(widthPercent) {
+  promptScreenElements.progressBarInner.style.width = widthPercent + "%";
+}
+
+function initPrompt() {
   // set heading elements
   promptScreenElements.heading.innerText = utils.getRandomTitle();
   promptScreenElements.timer.innerText = "TIME: ";
@@ -107,7 +113,8 @@ async function displayQuoteList() {
 export default {
   promptScreenElements,
   quoteListElements,
-  init,
+  initPrompt,
+  updateProgressBar,
   hideScreenElements,
   showScreenElements,
   displayQuoteList,

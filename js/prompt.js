@@ -21,24 +21,39 @@ export default prompt = {
     this.nextChar = this.letters[this.typedIndex + 1];
 
     if (this.prevChar) {
+      this.prevChar.classList.remove("cursor", "cursor-space");
       this.prevChar.classList.add("cursor-correct");
-      this.prevChar.classList.remove("cursor");
     }
 
     if (this.curChar !== "undefined") {
-      if (this.curChar && correctChar) {
-        this.curChar.classList.remove("cursor-correct");
-        this.curChar.classList.remove("cursor-wrong");
+      if (this.curChar) {
+        if (this.curChar.innerText == " ") {
+          this.curChar.classList.add("cursor-space");
+        }
 
-        this.curChar.classList.add("cursor");
-      } else if (this.curChar) {
-        this.curChar.classList.add("cursor-wrong");
+        if (correctChar) {
+          this.curChar.classList.remove("cursor-correct", "cursor-wrong");
+          this.curChar.classList.add("cursor");
+        } else {
+          this.curChar.classList.remove(
+            "cursor",
+            "cursor-correct",
+            "cursor-wrong"
+          );
+          this.curChar.classList.add("cursor-wrong");
+        }
       }
     }
 
     if (this.nextChar) {
-      this.nextChar.classList.remove("cursor");
+      // this.curChar.classList.remove("cursor-wrong");
+      // this.curChar.classList.remove("cursor-correct");
+      // this.curChar.classList.remove("cursor");
     }
+
+    // console.log((this.typedIndex / this.text.length) * 100);
+
+    ui.updateProgressBar((this.typedIndex / this.text.length) * 100);
   },
   reset: async function (text) {
     // reset prompt values to default
@@ -78,7 +93,7 @@ export default prompt = {
     this.update(true);
 
     // hide bottom text and scrollbar
-    document.body.style.overflow = "hidden";
+    // document.body.style.overflow = "hidden";
     ui.promptScreenElements.bottomText.style.display = "none";
   },
   start: function () {
