@@ -1,6 +1,7 @@
 # Click Clack
 
-Click clack is a simple typing game to measure your typing speed.
+[Click clack](https://jamesdixon.dev/click-clack) is a minimal typing game
+to measure your typing speed.
 
 ## Running Development Server
 
