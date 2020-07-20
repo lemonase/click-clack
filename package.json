@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/lemonase/click-clack#readme",
   "devDependencies": {
+    "eslint": "^7.5.0",
     "live-server": "^1.2.1",
     "standard": "^14.3.4"
   },

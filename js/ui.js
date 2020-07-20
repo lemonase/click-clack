@@ -95,7 +95,7 @@ async function displayQuoteList() {
         event.target.style.color = "white";
       });
 
-      listItem.addEventListener("click", (event) => {
+      listItem.addEventListener("click", () => {
         prompt.default.reset(fullText);
         hideScreenElements(quoteListElements);
         backBtn.style.display = "none";
